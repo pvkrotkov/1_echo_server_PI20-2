@@ -3,10 +3,9 @@ from time import sleep
 
 sock = socket.socket()
 sock.setblocking(1)
-sock.connect(('10.38.165.12', 9090))
+sock.connect(('localhost', 9092))
 
-#msg = input()
-msg = "Hi!"
+msg = input()
 sock.send(msg.encode())
 
 data = sock.recv(1024)
@@ -14,3 +13,6 @@ data = sock.recv(1024)
 sock.close()
 
 print(data.decode())
+
+
+
