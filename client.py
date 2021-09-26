@@ -1,16 +1,14 @@
 import socket
-from time import sleep
 
-sock = socket.socket()
-sock.setblocking(1)
-sock.connect(('localhost', 9090))
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+while True:
+    send_msg = input("Ты сказал: ")
 
-msg = input()
-#msg = "Hi!"
-sock.send(msg.encode())
+    client.sendto(send_msg.encode('utf-8'), ('localhost', 9090))
+    if send_msg == 'exit!':
+        break
 
-data = sock.recv(1024)
+    back_msg = client.recv(1024).decode('utf-8')
 
-sock.close()
-
-print(data.decode())
+    print(back_msg)
+client.close()
