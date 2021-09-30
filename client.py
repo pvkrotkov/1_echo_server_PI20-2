@@ -5,7 +5,7 @@ while True:
     client.sendto(send_msg.encode('utf-8'), ('localhost', 9090))
     if send_msg == 'exit!':
         break
-        back_msg = client.recv(1024).decode('utf-8')
-        print(back_msg)
+    back_msg = client.recv(1024).decode('utf-8')
+    print(back_msg)
 
-    client.close()
+client.close()
