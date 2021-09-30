@@ -1,13 +1,21 @@
 import socket
-chat = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-chat.bind(('localhost', 9090))
-print('Start chat ')
-data, addr = chat.recvfrom(1024)
-    revers = data.decode('utf-8')
-    if revers == 'exit!':
-        print("Chat stopped")
+fwq = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+fwq.bind(('localhost', 9090))
+
+print('Chat ')
+while True:
+    data, addr = fwq.recvfrom(1024)
+
+    recvmsg = data.decode('utf-8')
+
+    if recvmsg == 'exit!':
+        print("Другой участник добровольно закончил чат с тобой, пока!")
         break
-    print('User: ' + revers)
-    reply = input('Send: ')
-    chat.sendto(reply.encode('utf-8'), addr)
-chat.close()
+
+    print('client msg: ' + recvmsg)
+    replymsg = input('Ответить:')
+
+    fwq.sendto(replymsg.encode('utf-8'), addr)
+
+fwq.close()
