@@ -1,17 +1,36 @@
 import socket
-from time import sleep
+import threading
+import sys
 
-import socket
-# Создать сокет
-client=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-while 1:
-    send_msg=input("Ты написал:")
-    # Используйте этот сокет для кодирования того, что вы вводите, и отправьте его на этот адрес и соответствующий порт
-    client.sendto(send_msg.encode('utf-8'),('localhost',50000))
-    if send_msg=='q':
-        break
-    # Декодировать полученную информацию
-    back_msg=client.recv(1024).decode('utf-8')
-    # Печать декодированной информации
-    print(back_msg)
-client.close()
+host = "localhost"
+port = 7000
+sock = socket.socket()
+sock.connect((host, port))
+
+def Reciver():
+    while 1:
+        data = sock.recv(1024)
+        if data:
+            print(data.decode())
+
+def Sender():
+    while 1:
+        message = input()
+        if message == "exit":
+            sock.close()
+            sys.exit()
+        else:
+            sock.send(message.encode())
+
+# init threads
+t1 = threading.Thread(target=Reciver)
+t2 = threading.Thread(target=Sender)
+
+# start threads
+t1.start()
+t2.start()
+
+
+
+
+
