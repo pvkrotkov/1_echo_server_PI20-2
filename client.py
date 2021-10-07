@@ -1,16 +1,13 @@
 import socket
-from time import sleep
 
-sock = socket.socket()
-sock.setblocking(1)
-sock.connect(('10.38.165.12', 9090))
 
-#msg = input()
-msg = "Hi!"
-sock.send(msg.encode())
+while True:
+     sock = socket.socket()
+     sock.connect(('localhost', 10150))
+     my_massage = input("Введите ваше сообщение: ")
+     sock.send(my_massage.encode())
 
-data = sock.recv(1024)
-
-sock.close()
-
-print(data.decode())
+     data = sock.recv(1024)
+     data = data.decode()
+     print(data)
+     sock.close()
