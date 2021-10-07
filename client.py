@@ -1,16 +1,16 @@
 import socket
-from time import sleep
 
-sock = socket.socket()
-sock.setblocking(1)
-sock.connect(('10.38.165.12', 9090))
+client_socket = socket.socket()
+client_socket.connect(('localhost', 9905))
 
-#msg = input()
-msg = "Hi!"
-sock.send(msg.encode())
+while True:
+    try:
+        message = input().encode()
+        client_socket.send(message)
+        #  print('Ожидание сообщения')
+        request = client_socket.recv(1024)  # блокирующая операция
+        print(request.decode())
+    except KeyboardInterrupt:
+        break
 
-data = sock.recv(1024)
-
-sock.close()
-
-print(data.decode())
+client_socket.close()
