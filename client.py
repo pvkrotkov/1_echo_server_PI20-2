@@ -1,16 +1,22 @@
 import socket
-from time import sleep
 
-sock = socket.socket()
-sock.setblocking(1)
-sock.connect(('10.38.165.12', 9090))
+add = ('', 9090)
 
-#msg = input()
-msg = "Hi!"
-sock.send(msg.encode())
+sock = socket.socket() 
 
-data = sock.recv(1024)
+sock.connect(add) 
+print('Соединение с сервером', add)
+
+while True:
+    msg = input()
+    if msg == 'exit':
+        break
+    sock.send(msg.encode())
+    print(f'Отправка данных {msg} серверу', add)
+    data = sock.recv(1024)
+    data_dec = data.decode()
+    print(f'Прием данных {data_dec} от сервера', add)
+    print(data_dec)
 
 sock.close()
-
-print(data.decode())
+print ('Разрыв соединения с сервером', add)
