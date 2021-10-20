@@ -1,20 +1,28 @@
 import socket
 
 sock = socket.socket()
-sock.bind(('', 9090))
-sock.listen(0)
-conn, addr = sock.accept()
-print(addr)
 
-msg = ''
+add = ('', 9090)
+
+sock.bind(add)
+print('Запуск сервера', add)
+
+sock.listen()
+print('Начало прослушивания порта', add[1])
+
+conn, addr = sock.accept()
+print('Подключение клиента', addr)
 
 while True:
 	data = conn.recv(1024)
 	if not data:
-		break
-	msg += data.decode()
-	conn.send(data)
-
-print(msg)
+		break    
+	print(f'Прием данных {data.decode()} от клиента', addr)
+    conn.send(data)
+    print(f'Отправка данных {data.decode()} клиенту', addr)
 
 conn.close()
+print('Отключение клиента', addr)
+
+sock.close()
+print('Остановка сервера', add)
