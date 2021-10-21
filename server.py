@@ -1,20 +1,20 @@
 import socket
 
-sock = socket.socket()
-sock.bind(('', 9090))
-sock.listen(0)
-conn, addr = sock.accept()
-print(addr)
+sock = socket.socket() # создаем объект сокета
+sock.bind(('', 9090)) # связываем сокет с портом (от 1024 до 65536)
+sock.listen(1) # запускаем прослушивание порта (1 — размер очереди)
+conn, address = sock.accept() # принимаем подключение (возвращает нам объект подключения и адрес клиента)
 
 msg = ''
+while True: # создаем цикл для принтия пакетов порционно
+    data = conn.recv(1024)
+    if not data:
+        break
+    elif data.decode() == 'exit': # при отсутствии пакетов или при вводе клиентов 'exit' цикл прерывается
+        print("Подключение прервано")
+        break
+    msg += data.decode() # записываем все данные в переменную
+    conn.send(data.upper()) # меняем данные: возвращаем клиенту строку в верхнем регистре
 
-while True:
-	data = conn.recv(1024)
-	if not data:
-		break
-	msg += data.decode()
-	conn.send(data)
-
-print(msg)
-
-conn.close()
+print('Полученные данные: ', msg)
+conn.close() # закрываем соединение
