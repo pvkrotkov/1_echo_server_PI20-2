@@ -1,11 +1,11 @@
 import socket
 
-sock = socket.socket() # создаем объект сокета
+sock = socket.socket()
 sock.setblocking(1)
-sock.connect(('localhost', 9090)) # подключаемся к серверу
+sock.connect(('localhost', 9090)) 
 
 while True:
-    msg = input('Введите сообщение: ') # клиент вводит данные
+    msg = input('Введите сообщение: ') 
     if msg == 'exit': 
         sock.send(msg.encode())
         print("Подключение прервано")
