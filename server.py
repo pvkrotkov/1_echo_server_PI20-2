@@ -1,13 +1,30 @@
 import socket
 
-sock = socket.socket()
-sock.bind(('', 9090))
-sock.listen(1)
-conn, aadr = sock.accept()
-while True:
-    data = conn.recv(1024)
-    conn.send(data.upper())
-    if data.decode() == "exit":
-        break
+UDP_MAX_SIZE = 65535
 
-conn.close()
+def listen (host: str = '127.0.0.1', port: int = 3000):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind((host, port))
+    print(f'Listening at {host}:{port}')
+    members = []
+    while True:
+        msg, addr = s.recvfrom(UDP_MAX_SIZE)
+        if addr not in members:
+            members.append(addr)
+        if not msg:
+            continue
+        client_id = addr[1]
+        if msg.decode('ascii') == '__join':
+            print(f'Client {client_id} joined chat')
+            continue
+        if msg.decode('ascii') == 'exit':
+            break
+        msg = f'client{client_id}: {msg.decode("ascii")}'
+        for member in members:
+            if member == addr:
+                continue
+            s.sendto(msg.encode('ascii'), member)
+
+
+if __name__ == '__main__':
+    listen()
